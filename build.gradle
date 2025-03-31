@@ -28,6 +28,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // Spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
