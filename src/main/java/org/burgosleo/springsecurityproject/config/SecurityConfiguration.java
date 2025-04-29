@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http.csrf(CsrfConfigurer::disable);
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 "/api/v1/myAccount",
                 "/api/v1/myBalance",
@@ -29,6 +31,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(requests -> requests.requestMatchers(
                 "/api/v1/notices",
                 "/api/v1/contact",
+                "/api/v1/users",
                 "/login",
                 "/logout",
                 "/error").permitAll());
@@ -39,10 +42,10 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(DataSource dataSource) {
+//        return new JdbcUserDetailsManager(dataSource);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

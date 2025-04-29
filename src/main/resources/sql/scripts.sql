@@ -8,10 +8,18 @@ insert ignore into authorities values ('user','read');
 insert ignore into users values ('admin','{bcrypt}$2a$12$9j7nuEOK75ygjwtHtc3ntORhhRqCKvZXOhFNZQqfeMevY.gcj0Ewm','1');
 insert ignore into authorities values ('admin','admin');
 
+create table customer
+(
+    id bigint not null auto_increment,
+    email varchar(45) not null,
+    pwd varchar(200) not null,
+    role varchar(45) not null,
+    primary key (id)
+);
 
-delete from users where username='admin';
+insert into customer (email, pwd, role) values ('test@example.com', '{noop}password', 'read');
+insert into customer (email, pwd, role) values ('admin@example.com', '{bcrypt}$2a$12$9j7nuEOK75ygjwtHtc3ntORhhRqCKvZXOhFNZQqfeMevY.gcj0Ewm', 'admin');
 
-delete from authorities where username='admin';
+select * from customer;
 
-select * from users;
-select * from authorities;
+delete from customer where email = 'john.doe@example.com';
