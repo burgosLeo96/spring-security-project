@@ -1,19 +1,20 @@
 package org.burgosleo.springsecurityproject.config;
 
+import org.burgosleo.springsecurityproject.config.filter.AuthoritiesLoggingAtFilter;
+import org.burgosleo.springsecurityproject.config.filter.CsrfCookieFilter;
+import org.burgosleo.springsecurityproject.config.filter.AuthoritiesLoggingAfterFilter;
+import org.burgosleo.springsecurityproject.config.filter.RequestValidationBeforeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 public class SecurityConfiguration {
@@ -21,7 +22,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(CsrfConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
+
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 "/api/v1/myAccount",
                 "/api/v1/myBalance",
@@ -35,6 +37,11 @@ public class SecurityConfiguration {
                 "/login",
                 "/logout",
                 "/error").permitAll());
+
+        http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class);
 
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());

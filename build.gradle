@@ -31,6 +31,9 @@ dependencies {
     // Spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // String utils
+    implementation "org.apache.commons:commons-lang3"
+
     // Spring data
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
