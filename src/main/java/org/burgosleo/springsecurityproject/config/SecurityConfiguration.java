@@ -54,7 +54,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/myAccount").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/v1/myBalance").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/v1/myCards").hasRole("USER")
-                .requestMatchers("/api/v1/myLoans").hasRole("USER")
+                .requestMatchers("/api/v1/myLoans").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/users").authenticated()
                 .requestMatchers("/api/v1/notices",
                         "/api/v1/users/login",
